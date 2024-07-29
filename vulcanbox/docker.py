@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from typing import List
@@ -71,7 +72,12 @@ def __build_docker_image(dockerfile_path: str, image_name: str) -> None:
 @click.option(
     "--expose", multiple=True, type=int, help="Ports to expose in the Dockerfile"
 )
-def new(name: str, base: str, expose: List[int], build: str):
+@click.option(
+    "--export-config",
+    is_flag=True,
+    help="Export the current configurations of the templated Dockerfile",
+)
+def new(name: str, base: str, expose: List[int], build: str, export_config: bool):
     """Initialize a template Dockerfile."""
     # Create project directory if it doesn't exist
     new_file = os.path.join(os.getcwd(), name)
@@ -87,6 +93,16 @@ def new(name: str, base: str, expose: List[int], build: str):
             raise VulcanBoxInputError(f"Image already built: {image.image_tag}")
         built_image = image.build(build)
         click.echo(f"Finished building image: {built_image.id}")
+
+    if export_config:
+        base_image_used = base.replace(":", "-")
+        parsed_name = name.replace(".Dockerfile", "")
+        exported_config_file = os.path.join(
+            os.getcwd(), f"vulcanbox-{parsed_name}-{base_image_used}.json"
+        )
+        with open(exported_config_file, "w") as json_file:
+            json.dump(image.json(), json_file, indent=4)
+            click.echo(f"Config JSON exported: {exported_config_file}")
 
 
 @click.command("list")

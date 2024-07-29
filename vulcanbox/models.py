@@ -1,6 +1,6 @@
 import datetime as dt
 import logging
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import click
 import docker
@@ -22,6 +22,14 @@ class DockerImage(BaseTemplatedFile):
 
     def is_built(self) -> bool:
         return self.image_tag is not None
+
+    def json(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "tag": self.image_tag,
+            "ports": self.ports,
+            "context": self.context,
+        }
 
     @staticmethod
     def __get_image_name(base_name: str) -> str:
