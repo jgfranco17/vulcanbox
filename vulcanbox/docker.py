@@ -83,6 +83,10 @@ def new(name: str, base: str, expose: List[int], build: str, export_config: bool
     new_file = os.path.join(os.getcwd(), name)
     if os.path.exists(new_file):
         raise VulcanBoxInputError(f"Dockerfile already exists: {new_file}")
+
+    logger.debug(f"Creating new Dockerfile: {name} [base image {base}]")
+    if build:
+        logger.debug(f"Image will build automatically after {name} is created")
     context = {"base_image": base, "ports": expose}
     image = DockerImage(name, expose, context)
     image.write()
@@ -100,6 +104,7 @@ def new(name: str, base: str, expose: List[int], build: str, export_config: bool
         exported_config_file = os.path.join(
             os.getcwd(), f"vulcanbox-{parsed_name}-{base_image_used}.json"
         )
+        logger.debug(f"Creating new config file at {exported_config_file}")
         with open(exported_config_file, "w") as json_file:
             json.dump(image.json(), json_file, indent=4)
             click.echo(f"Config JSON exported: {exported_config_file}")
