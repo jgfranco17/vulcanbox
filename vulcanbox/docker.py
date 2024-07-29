@@ -83,6 +83,8 @@ def new(name: str, base: str, expose: List[int], build: str):
     print_success(f"Created new Dockerfile: {new_file}")
 
     if build:
+        if image.is_built():
+            raise VulcanBoxInputError(f"Image already built: {image.image_tag}")
         built_image = image.build(build)
         click.echo(f"Finished building image: {built_image.id}")
 

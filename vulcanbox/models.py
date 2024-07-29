@@ -1,6 +1,6 @@
+import datetime as dt
 import logging
 from typing import Dict, List, Optional
-from uuid import uuid4
 
 import click
 import docker
@@ -23,9 +23,15 @@ class DockerImage(BaseTemplatedFile):
     def is_built(self) -> bool:
         return self.image_tag is not None
 
+    @staticmethod
+    def __get_image_name(base_name: str) -> str:
+        now = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        sanitized_name = base_name.replace(" ", "-").replace("/", "-")
+        return f"vulcanbox-{sanitized_name}-{now}"
+
     def build(self, name: Optional[str] = ""):
         """Build the Docker image."""
-        self.image_tag = f"vulcanbox-{name}-{uuid4()}"
+        self.image_tag = self.__get_image_name(name)
         image, logs = self.client.images.build(
             path=".",
             dockerfile=self.destination,
