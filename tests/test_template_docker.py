@@ -24,6 +24,7 @@ def test_template_new_image_sane(
     assert result.exit_code == 0
     assert_files_created(str(tmp_path), expected_files)
     expected_file_path = os.path.join(str(tmp_path), dockerfile_name)
+    assert_lines_in_file(expected_file_path, ["FROM ubuntu:20.04 AS build-stage"])
     assert (
         f"Wrote to file: {expected_file_path}" in caplog.text
     ), f"Did not find success log message for image templating"
