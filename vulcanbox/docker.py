@@ -88,4 +88,17 @@ def new(name: str, base: str, expose: List[int], build: str):
         click.echo(f"Finished building image: {built_image.id}")
 
 
+@click.command("list")
+def list_images():
+    """Get a list of images."""
+    client = docker.from_env()
+    images = client.images.list()
+    logger.info(f"Found {len(images)} images")
+    for idx, image in enumerate(images, start=1):
+        tags = ", ".join(image.tags)
+        name = tags or "none"
+        click.echo(f"[{idx}] {name} ({image.id})")
+
+
 docker_group.add_command(new)
+docker_group.add_command(list_images)
