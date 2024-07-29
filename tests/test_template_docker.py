@@ -63,3 +63,49 @@ def test_template_new_image_with_exposed_ports(
     assert (
         f"Wrote to file: {expected_file_path}" in caplog.text
     ), f"Did not find success log message for image templating"
+
+
+def test_template_new_image_invalid_name(
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+    runner: TestRunner,
+    caplog: LogCaptureFixture,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    result = runner.run_cli(
+        [
+            "-vv",
+            "docker",
+            "new",
+            "--name",
+            "not-valid.txt",
+        ]
+    )
+
+    assert result.exit_code == 2
+    assert "Name is invalid" in caplog.text
+
+
+def test_template_new_image_file_already_exists(
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+    runner: TestRunner,
+    caplog: LogCaptureFixture,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    unoriginal_file_name = "exists.Dockerfile"
+    existing_file = Path(os.path.join(str(tmp_path), unoriginal_file_name))
+    existing_file.touch()
+    result = runner.run_cli(
+        [
+            "-vv",
+            "docker",
+            "new",
+            "--name",
+            unoriginal_file_name,
+        ]
+    )
+
+    assert result.exit_code == 2
+    assert f"Dockerfile already exists: {str(existing_file)}" in caplog.text
