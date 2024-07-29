@@ -6,6 +6,6 @@ def test_help_message_sane(runner: TestRunner) -> None:
     result = runner.run_cli(["--help"])
     assert result.exit_code == 0
     assert (
-        "VulcanBox: CLI tool for managing Github repositories from local"
+        "VulcanBox: CLI tool for managing containers and virtual machines"
         in result.output
     )

@@ -41,7 +41,7 @@ def __set_logger(level: int):
     help="Increase verbosity. Use multiple times for more detail (e.g., -vv for debug).",
 )
 def cli(context: click.Context, verbose: int):
-    """VulcanBox: CLI tool for managing Github repositories from local"""
+    """VulcanBox: CLI tool for managing containers and virtual machines"""
     __set_logger(verbose)
     context.ensure_object(dict)
 
