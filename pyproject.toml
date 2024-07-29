@@ -1,0 +1,30 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "vulcanbox"
+version = "0.1.0"
+description = "Python-based CLI tool for virtual test environments"
+authors = ["Joaquin Franco <chino.franco@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "vulcanbox" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = "^8.1.7"
+colorama = "^0.4.6"
+requests = "^2.32.3"
+pyyaml = "^6.0.1"
+jinja2 = "^3.1.4"
+docker = "^7.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+pre-commit = "^3.8.0"
+
+[tool.poetry.scripts]
+vulcanbox = "vulcanbox.main:cli"

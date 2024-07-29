@@ -1,0 +1,19 @@
+FROM {{ base_image }} AS build-stage
+
+COPY . /app
+WORKDIR /app
+
+{%- if 'python' in base_image %}
+COPY requirements.txt /app
+RUN pip install some-python-specific-package
+{%- endif %}
+
+{% if ports -%}
+# Expose ports
+{%- for port in ports %}
+EXPOSE {{ port }}
+{%- endfor %}
+{%- endif %}
+
+# Override the entrypoint to start a shell if no command is provided
+CMD ["/bin/bash"]
