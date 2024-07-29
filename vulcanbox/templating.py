@@ -17,7 +17,7 @@ class BaseTemplatedFile:
             raise VulcanBoxInputError(f"Name is invalid, must end with 'Dockerfile'")
         self.__name = name
         self.template_dir = os.path.join(os.path.dirname(__file__), "templates")
-        self.source = os.path.join(self.template_dir, name)
+        self.source = os.path.join(self.template_dir, src)
         self.env = Environment(
             loader=FileSystemLoader(self.template_dir),
             trim_blocks=False,

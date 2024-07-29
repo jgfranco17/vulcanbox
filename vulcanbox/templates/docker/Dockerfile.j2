@@ -8,8 +8,7 @@ COPY requirements.txt /app
 RUN pip install some-python-specific-package
 {%- endif %}
 
-{% if ports -%}
-# Expose ports
+{%- if ports -%}
 {%- for port in ports %}
 EXPOSE {{ port }}
 {%- endfor %}
