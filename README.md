@@ -1,15 +1,14 @@
 # VulcanBox
 
-VulcanBox is a powerful and user-friendly command-line interface (CLI) tool designed to help you manage your Github repositories efficiently.
+VulcanBox is a powerful and user-friendly command-line interface (CLI) tool designed to help you manage your test containers easily.
 
 ## Features
 
 With VulcanBox, you can...
 
-- Create repositories: Create new GitHub repositories effortlessly.
-- List repositories: List all repositories of a specified GitHub user.
-- Clone repositories: Clone repositories to your local machine.
-- Manage collaborators: Add or remove collaborators from your repositories.
+- Create Docker images
+- Create Virtualbox VMs
+- List available images and VMs
 
 ## Development Setup
 
@@ -30,7 +29,7 @@ VulcanBox can be installed using Poetry. Ensure you have Poetry installed on you
 1. Clone the repository
 
    ```shell
-   git clone https://github.com/yourusername/vulcanbox.git
+   git clone https://github.com/jgfranco17/vulcanbox.git
    cd vulcanbox
    ```
 
@@ -40,18 +39,11 @@ VulcanBox can be installed using Poetry. Ensure you have Poetry installed on you
    poetry install
    ```
 
-3. Set up your environment variables for GitHub API
-
-   ```bash
-   export GITHUB_USERNAME="your username"
-   export GITHUB_API_TOKEN="my-token"
-   ```
-
 There is also a Docker implementation available.
 
 ```shell
 docker build -t vulcanbox .
-docker run --rm -e GITHUB_API_TOKEN="${GITHUB_API_TOKEN}" -e GITHUB_USERNAME="${GITHUB_USERNAME}" vulcanbox --version
+docker run --rm vulcanbox --version
 ```
 
 ## Usage
