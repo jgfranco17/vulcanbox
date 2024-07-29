@@ -25,6 +25,7 @@ docker = "^7.1.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
 pre-commit = "^3.8.0"
+black = "^24.4.2"
 
 [tool.poetry.scripts]
 vulcanbox = "vulcanbox.main:cli"
