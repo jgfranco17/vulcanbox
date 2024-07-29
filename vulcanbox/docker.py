@@ -5,10 +5,9 @@ from typing import List
 import click
 import docker
 
-from .constants import Environment
-from .errors import VulcanBoxInputError, VulcanBoxRuntimeError
+from .errors import VulcanBoxInputError
 from .models import DockerImage
-from .output import print_error, print_success
+from .output import print_success
 
 logger = logging.getLogger(__name__)
 

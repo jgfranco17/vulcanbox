@@ -1,5 +1,6 @@
 import logging
 
+import click
 from colorama import Fore, Style
 
 
@@ -24,7 +25,7 @@ def print_error(message: str) -> None:
     Args:
         message (str): The error message to print.
     """
-    print(f"{Fore.RED}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    click.echo(f"{Fore.RED}{Style.BRIGHT}{message}{Style.RESET_ALL}")
 
 
 def print_warning(message: str) -> None:
@@ -34,7 +35,7 @@ def print_warning(message: str) -> None:
     Args:
         message (str): The warning message to print.
     """
-    print(f"{Fore.YELLOW}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    click.echo(f"{Fore.YELLOW}{Style.BRIGHT}{message}{Style.RESET_ALL}")
 
 
 def print_success(message: str) -> None:
@@ -44,4 +45,4 @@ def print_success(message: str) -> None:
     Args:
         message (str): The success message to print.
     """
-    print(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    click.echo(f"{Fore.GREEN}{Style.BRIGHT}{message}{Style.RESET_ALL}")
