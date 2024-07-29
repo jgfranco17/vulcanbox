@@ -1,48 +1,48 @@
 import logging
-import os
-import shutil
-from typing import Dict
+from typing import Dict, List, Optional
+from uuid import uuid4
 
-from jinja2 import Environment, FileSystemLoader
+import click
+import docker
+from tqdm import tqdm
 
-from .errors import VulcanBoxInputError
+from .templating import BaseTemplatedFile
 
 logger = logging.getLogger(__name__)
 
 
-class BaseTemplatedFile:
-    """Base class for templated files."""
+class DockerImage(BaseTemplatedFile):
+    """Template engine for repositories."""
 
-    def __init__(self, name: str, src: str, context: Dict[str, str]) -> None:
-        if not name.endswith("Dockerfile"):
-            raise VulcanBoxInputError(f"Name is invalid, must end with 'Dockerfile'")
-        self.__name = name
-        self.template_dir = os.path.join(os.path.dirname(__file__), "templates")
-        self.source = os.path.join(self.template_dir, name)
-        self.env = Environment(
-            loader=FileSystemLoader(self.template_dir),
-            trim_blocks=False,
-            lstrip_blocks=False,
+    def __init__(self, name: str, ports: List[int], context: Dict[str, str]) -> None:
+        self.client = docker.from_env()
+        self.ports = ports or []
+        super().__init__(name=name, src="docker", context=context)
+        self.image_tag = None
+
+    def is_built(self) -> bool:
+        return self.image_tag is not None
+
+    def build(self, name: Optional[str] = ""):
+        """Build the Docker image."""
+        self.image_tag = f"vulcanbox-{name}-{uuid4()}"
+        image, logs = self.client.images.build(
+            path=".",
+            dockerfile=self.destination,
+            tag=self.image_tag,
+            nocache=True,
+            rm=True,
+            forcerm=True,
         )
-        self.context = context
+        for log in tqdm(logs, desc=f"Building [{self.image_tag}]"):
+            if "stream" in log:
+                click.echo(log["stream"].strip())
+        return image
 
-    @property
-    def name(self) -> str:
-        return self.__name
-
-    def __render_template(self, file: str) -> str:
-        """Render a template file with the given context."""
-        template = self.env.get_template(file)
-        rendered_content = template.render(self.context)
-        if not rendered_content.endswith("\n"):
-            rendered_content += "\n"
-        return rendered_content
-
-    def write(self) -> None:
-        """Write the contents to file."""
-        destination = os.path.join(os.getcwd(), self.__name)
-
-        with open(destination, "w") as f:
-            file_content = self.__render_template("docker/Dockerfile.j2")
-            f.write(file_content)
-            logger.info(f"Wrote to file: {destination}")
+    def start(self) -> None:
+        """Run the Docker container."""
+        container = self.client.containers.run(
+            self.name, name=self.container_name, remove=True, detach=True
+        )
+        print(container.logs().decode("utf-8"))
+        return container

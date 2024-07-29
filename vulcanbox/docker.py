@@ -7,8 +7,8 @@ import docker
 
 from .constants import Environment
 from .errors import VulcanBoxInputError, VulcanBoxRuntimeError
+from .models import DockerImage
 from .output import print_error, print_success
-from .templating import DockerImage
 
 logger = logging.getLogger(__name__)
 
@@ -63,15 +63,16 @@ def __build_docker_image(dockerfile_path: str, image_name: str) -> None:
     default="ubuntu:20.04",
 )
 @click.option(
-    "--auto-run",
-    default=False,
-    is_flag=True,
-    help="Run the image once the Dockerfile is created",
+    "--build",
+    type=str,
+    required=True,
+    help="Build the image after templating",
+    default="",
 )
 @click.option(
     "--expose", multiple=True, type=int, help="Ports to expose in the Dockerfile"
 )
-def new(name: str, base: str, expose: List[int], auto_run: bool):
+def new(name: str, base: str, expose: List[int], build: str):
     """Initialize a template Dockerfile."""
     # Create project directory if it doesn't exist
     new_file = os.path.join(os.getcwd(), name)
@@ -82,8 +83,9 @@ def new(name: str, base: str, expose: List[int], auto_run: bool):
     image.write()
     print_success(f"Created new Dockerfile: {new_file}")
 
-    if auto_run:
-        click.echo(f"Running {image.name}")
+    if build:
+        built_image = image.build(build)
+        click.echo(f"Finished building image: {built_image.id}")
 
 
 docker_group.add_command(new)
