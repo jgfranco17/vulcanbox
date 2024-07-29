@@ -8,6 +8,10 @@ default:
 install:
     poetry install
 
+# Run the CLI tool with Poetry
+vulcanbox *ARGS:
+    @poetry run vulcanbox {{ ARGS }}
+
 # Build Docker image
 build-docker:
     docker build -t vulcanbox .
