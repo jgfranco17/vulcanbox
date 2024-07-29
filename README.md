@@ -1,6 +1,7 @@
 # VulcanBox
 
-VulcanBox is a powerful and user-friendly command-line interface (CLI) tool designed to help you manage your test containers easily.
+VulcanBox is a powerful and user-friendly command-line interface (CLI) tool designed to help you
+manage your test containers easily.
 
 ## Features
 
