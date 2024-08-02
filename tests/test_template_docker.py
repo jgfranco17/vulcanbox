@@ -12,13 +12,10 @@ from vulcanbox.models import DockerImage
 def test_docker_object_json() -> None:
     expected_json = {
         "name": "test.Dockerfile",
-        "ports": [5000, 5050],
         "tag": None,
         "context": {"foo": "bar"},
     }
-    test_image = DockerImage(
-        name="test.Dockerfile", ports=[5000, 5050], context={"foo": "bar"}
-    )
+    test_image = DockerImage(name="test.Dockerfile", context={"foo": "bar"})
     assert test_image.json() == expected_json
 
 
@@ -158,7 +155,6 @@ def test_template_new_image_json_exported(
     with open(test_json_file, "r") as config_file:
         expected_json = {
             "name": "test.Dockerfile",
-            "ports": [5050],
             "tag": None,
             "context": {"base_image": "ubuntu:20.04", "ports": [5050]},
         }

@@ -88,7 +88,7 @@ def new(name: str, base: str, expose: List[int], build: str, export_config: bool
     if build:
         logger.debug(f"Image will build automatically after {name} is created")
     context = {"base_image": base, "ports": expose}
-    image = DockerImage(name, expose, context)
+    image = DockerImage(name, context)
     image.write()
     print_success(f"Created new Dockerfile: {new_file}")
 

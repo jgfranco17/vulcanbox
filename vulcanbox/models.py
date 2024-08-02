@@ -1,11 +1,13 @@
 import datetime as dt
 import logging
+import os
 from typing import Any, Dict, List, Optional
 
 import click
 import docker
 from tqdm import tqdm
 
+from .errors import VulcanBoxInputError
 from .templating import BaseTemplatedFile
 
 logger = logging.getLogger(__name__)
@@ -14,9 +16,8 @@ logger = logging.getLogger(__name__)
 class DockerImage(BaseTemplatedFile):
     """Template engine for repositories."""
 
-    def __init__(self, name: str, ports: List[int], context: Dict[str, str]) -> None:
+    def __init__(self, name: str, context: Dict[str, str]) -> None:
         self.client = docker.from_env()
-        self.ports = ports or []
         super().__init__(name=name, src="docker", context=context)
         self.image_tag = None
 
@@ -27,7 +28,6 @@ class DockerImage(BaseTemplatedFile):
         return {
             "name": self.name,
             "tag": self.image_tag,
-            "ports": self.ports,
             "context": self.context,
         }
 
