@@ -42,7 +42,9 @@ jobs:
       - name: Create GHA job summary
         if: always()
         run: |
-          echo "### Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "**${TIMESTAMP}**" >> $GITHUB_STEP_SUMMARY
           echo '```shell' >> $GITHUB_STEP_SUMMARY
           cat coverage.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

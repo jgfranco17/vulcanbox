@@ -1,0 +1,119 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.2, pluggy-1.5.0 -- /home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/bin/python
+cachedir: .pytest_cache
+rootdir: /home/chinofranco/dev/vulcanbox
+configfile: pyproject.toml
+collecting ... collected 9 items
+
+tests/test_basic.py::test_help_message_sane PASSED                       [ 11%]
+tests/test_template_compose.py::test_template_new_compose_file_sane PASSED [ 22%]
+tests/test_template_compose.py::test_template_new_compose_invalid_image PASSED [ 33%]
+tests/test_template_docker.py::test_docker_object_json PASSED            [ 44%]
+tests/test_template_docker.py::test_template_new_image_sane PASSED       [ 55%]
+tests/test_template_docker.py::test_template_new_image_with_exposed_ports PASSED [ 66%]
+tests/test_template_docker.py::test_template_new_image_invalid_name PASSED [ 77%]
+tests/test_template_docker.py::test_template_new_image_file_already_exists PASSED [ 88%]
+tests/test_template_docker.py::test_template_new_image_json_exported PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/conftest.py:12
+  /home/chinofranco/dev/vulcanbox/tests/conftest.py:12: PytestCollectionWarning: cannot collect test class 'TestRunner' because it has a __init__ constructor (from: tests/test_basic.py)
+    class TestRunner:
+
+tests/conftest.py:12
+  /home/chinofranco/dev/vulcanbox/tests/conftest.py:12: PytestCollectionWarning: cannot collect test class 'TestRunner' because it has a __init__ constructor (from: tests/test_template_compose.py)
+    class TestRunner:
+
+tests/conftest.py:12
+  /home/chinofranco/dev/vulcanbox/tests/conftest.py:12: PytestCollectionWarning: cannot collect test class 'TestRunner' because it has a __init__ constructor (from: tests/test_template_docker.py)
+    class TestRunner:
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+_____________________ test_template_new_compose_file_sane ______________________
+------------------------------ Captured log call -------------------------------
+DEBUG    vulcanbox.docker:docker.py:163 Creating new Compose file: using 'mock.Dockerfile', 1 replicas
+INFO     vulcanbox.templating:templating.py:64 Wrote to file: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_compose_file0/docker-compose.yml
+___________________ test_template_new_compose_invalid_image ____________________
+------------------------------ Captured log call -------------------------------
+ERROR    vulcanbox.errors:errors.py:75 Specified Dockerfile does not exist: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_compose_inva0/non-existent.Dockerfile
+Traceback (most recent call last):
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/errors.py", line 72, in invoke
+    return super().invoke(ctx)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/docker.py", line 155, in new_compose
+    raise VulcanBoxInputError(f"Specified Dockerfile does not exist: {image_file}")
+vulcanbox.errors.VulcanBoxInputError: Specified Dockerfile does not exist: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_compose_inva0/non-existent.Dockerfile
+ERROR    vulcanbox.errors:errors.py:76 Specified Dockerfile does not exist: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_compose_inva0/non-existent.Dockerfile
+_________________________ test_template_new_image_sane _________________________
+------------------------------ Captured log call -------------------------------
+DEBUG    vulcanbox.docker:docker.py:87 Creating new Dockerfile: test.Dockerfile [base image ubuntu:20.04]
+INFO     vulcanbox.templating:templating.py:64 Wrote to file: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_sane0/test.Dockerfile
+__________________ test_template_new_image_with_exposed_ports __________________
+------------------------------ Captured log call -------------------------------
+DEBUG    vulcanbox.docker:docker.py:87 Creating new Dockerfile: test.Dockerfile [base image ubuntu:20.04]
+INFO     vulcanbox.templating:templating.py:64 Wrote to file: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_with_e0/test.Dockerfile
+_____________________ test_template_new_image_invalid_name _____________________
+------------------------------ Captured log call -------------------------------
+DEBUG    vulcanbox.docker:docker.py:87 Creating new Dockerfile: not-valid.txt [base image ubuntu:20.04]
+ERROR    vulcanbox.errors:errors.py:75 Name is invalid, must end with 'Dockerfile'
+Traceback (most recent call last):
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/errors.py", line 72, in invoke
+    return super().invoke(ctx)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/docker.py", line 91, in new_image
+    image = DockerImage(name, context)
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/models.py", line 21, in __init__
+    super().__init__(
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/templating.py", line 24, in __init__
+    raise VulcanBoxInputError(f"Name is invalid, must end with 'Dockerfile'")
+vulcanbox.errors.VulcanBoxInputError: Name is invalid, must end with 'Dockerfile'
+ERROR    vulcanbox.errors:errors.py:76 Name is invalid, must end with 'Dockerfile'
+_________________ test_template_new_image_file_already_exists __________________
+------------------------------ Captured log call -------------------------------
+ERROR    vulcanbox.errors:errors.py:75 Dockerfile already exists: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_file_a0/exists.Dockerfile
+Traceback (most recent call last):
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/errors.py", line 72, in invoke
+    return super().invoke(ctx)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/chinofranco/.cache/pypoetry/virtualenvs/vulcanbox-mrcpEkzg-py3.10/lib/python3.10/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/chinofranco/dev/vulcanbox/vulcanbox/docker.py", line 85, in new_image
+    raise VulcanBoxInputError(f"Dockerfile already exists: {new_file}")
+vulcanbox.errors.VulcanBoxInputError: Dockerfile already exists: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_file_a0/exists.Dockerfile
+ERROR    vulcanbox.errors:errors.py:76 Dockerfile already exists: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_file_a0/exists.Dockerfile
+____________________ test_template_new_image_json_exported _____________________
+------------------------------ Captured log call -------------------------------
+DEBUG    vulcanbox.docker:docker.py:87 Creating new Dockerfile: test.Dockerfile [base image ubuntu:20.04]
+INFO     vulcanbox.templating:templating.py:64 Wrote to file: /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_json_e0/test.Dockerfile
+DEBUG    vulcanbox.docker:docker.py:107 Creating new config file at /tmp/pytest-of-chinofranco/pytest-36/test_template_new_image_json_e0/vulcanbox-test-ubuntu-20.04.json
+=========================== short test summary info ============================
+PASSED tests/test_basic.py::test_help_message_sane
+PASSED tests/test_template_compose.py::test_template_new_compose_file_sane
+PASSED tests/test_template_compose.py::test_template_new_compose_invalid_image
+PASSED tests/test_template_docker.py::test_docker_object_json
+PASSED tests/test_template_docker.py::test_template_new_image_sane
+PASSED tests/test_template_docker.py::test_template_new_image_with_exposed_ports
+PASSED tests/test_template_docker.py::test_template_new_image_invalid_name
+PASSED tests/test_template_docker.py::test_template_new_image_file_already_exists
+PASSED tests/test_template_docker.py::test_template_new_image_json_exported
+======================== 9 passed, 3 warnings in 0.10s =========================

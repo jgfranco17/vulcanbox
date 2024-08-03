@@ -40,4 +40,14 @@ jobs:
 
       - name: Run tests
         run: |
-          just pytest -vv -rA
+          just pytest -vv -rA > test-results.txt
+
+      - name: Create GHA job summary
+        if: always()
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          echo "## Pytest Report" >> $GITHUB_STEP_SUMMARY
+          echo "**${TIMESTAMP}**" >> $GITHUB_STEP_SUMMARY
+          echo '```shell' >> $GITHUB_STEP_SUMMARY
+          cat test-results.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
