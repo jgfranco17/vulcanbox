@@ -4,7 +4,6 @@ import click
 import colorama
 
 from . import __version__
-from .constants import LoggerFormats
 from .docker import new_group
 from .errors import ErrorHandler
 from .output import ColorHandler

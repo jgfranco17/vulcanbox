@@ -4,7 +4,6 @@ import os
 from typing import List
 
 import click
-import docker
 
 from .errors import VulcanBoxInputError
 from .models import DockerCompose, DockerImage
@@ -17,32 +16,6 @@ logger = logging.getLogger(__name__)
 def new_group() -> None:
     """Create new images and configurations."""
     pass
-
-
-def __validate_directory(ctx: click.Context, param: click.Parameter, value: str) -> str:
-    if value and not os.path.isdir(value):
-        raise VulcanBoxInputError(
-            f"The directory '{value}' does not exist or is not a directory."
-        )
-    return value
-
-
-def __build_docker_image(dockerfile_path: str, image_name: str) -> None:
-    """Build the Docker image from the Dockerfile."""
-    client = docker.from_env()
-    try:
-        image, logs = client.images.build(
-            path=os.path.dirname(dockerfile_path),
-            dockerfile=os.path.basename(dockerfile_path),
-            tag=image_name,
-        )
-        for log in logs:
-            logger.info(log.get("stream", "").strip())
-        logger.info(f"Docker image {image_name} built successfully.")
-    except docker.errors.BuildError as e:
-        logger.error(f"Error building Docker image: {e}")
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
 
 
 @click.command("image")

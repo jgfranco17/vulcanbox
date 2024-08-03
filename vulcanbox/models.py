@@ -1,13 +1,12 @@
 import datetime as dt
 import logging
-import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import click
 import docker
 from tqdm import tqdm
 
-from .errors import VulcanBoxInputError
+from .constants import VulcanBoxFileType
 from .templating import BaseTemplatedFile
 
 logger = logging.getLogger(__name__)
@@ -21,7 +20,7 @@ class DockerImage(BaseTemplatedFile):
         super().__init__(
             name=name,
             src="docker",
-            file_type="Dockerfile",
+            file_type=VulcanBoxFileType.DOCKERFILE,
             context=context,
             whitespace=False,
         )
@@ -76,6 +75,6 @@ class DockerCompose(BaseTemplatedFile):
         super().__init__(
             name="docker-compose.yml",
             src="compose",
-            file_type="docker-compose.yml",
+            file_type=VulcanBoxFileType.DOCKER_COMPOSE,
             context=context,
         )

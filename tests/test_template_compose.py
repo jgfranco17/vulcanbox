@@ -11,7 +11,6 @@ def test_template_new_compose_file_sane(
     tmp_path: Path,
     monkeypatch: MonkeyPatch,
     runner: TestRunner,
-    caplog: LogCaptureFixture,
 ) -> None:
     monkeypatch.chdir(tmp_path)
     dockerfile_mock = Path(os.path.join(str(tmp_path), "mock.Dockerfile"))
@@ -69,8 +68,6 @@ def test_template_new_compose_invalid_replicas(
 ) -> None:
     monkeypatch.chdir(tmp_path)
     dockerfile_mock = Path(os.path.join(str(tmp_path), "mock.Dockerfile"))
-    generated_compose = Path(os.path.join(str(tmp_path), "docker-compose.yml"))
-    generated_files = [str(dockerfile_mock), str(generated_compose)]
     dockerfile_mock.touch()
 
     result = runner.run_cli(
