@@ -141,7 +141,10 @@ def new_image(name: str, base: str, expose: List[int], build: str, export_config
 )
 def new_compose(image: str, expose: int, count: str, with_network: bool) -> None:
     """Initialize a template Docker Compose suite."""
+    # Set compose file path to current working dir
     compose_file = os.path.join(os.getcwd(), "docker-compose.yml")
+
+    # Input validation
     if os.path.exists(compose_file):
         if not click.confirm(
             f"Compose file already exists in current directory, overwrite?",
@@ -149,10 +152,13 @@ def new_compose(image: str, expose: int, count: str, with_network: bool) -> None
         ):
             print_warning("[USER ABORTED] Compose generation cancelled.")
             return
-
     image_file = os.path.join(os.getcwd(), image)
     if not os.path.exists(image_file):
         raise VulcanBoxInputError(f"Specified Dockerfile does not exist: {image_file}")
+    if count < 1:
+        raise VulcanBoxInputError(f"Replica count must at least 1 but got {count}")
+    if expose < 1024 and expose != 22:
+        raise VulcanBoxInputError(f"Cannot expose port {expose} (privileged)")
 
     context = {
         "image": image,

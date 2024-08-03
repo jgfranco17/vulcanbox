@@ -40,7 +40,7 @@ jobs:
 
       - name: Run tests
         run: |
-          just pytest -vv -rA > test-results.txt
+          just pytest -vv > test-results.txt
 
       - name: Create GHA job summary
         if: always()
