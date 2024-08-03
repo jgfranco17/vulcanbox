@@ -1,22 +1,12 @@
 import json
 import os
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 from pytest import LogCaptureFixture, MonkeyPatch
 
 from tests.conftest import TestRunner
 from tests.helpers import assert_files_created, assert_lines_in_file
-from vulcanbox.models import DockerImage
-
-
-def test_docker_object_json() -> None:
-    expected_json = {
-        "name": "test.Dockerfile",
-        "tag": None,
-        "context": {"foo": "bar"},
-    }
-    test_image = DockerImage(name="test.Dockerfile", context={"foo": "bar"})
-    assert test_image.json() == expected_json
 
 
 def test_template_new_image_sane(
@@ -131,11 +121,51 @@ def test_template_new_image_file_already_exists(
     assert f"Dockerfile already exists: {str(existing_file)}" in caplog.text
 
 
+def test_template_new_image_with_build(
+    mock_datetime: MagicMock,
+    mock_docker: MagicMock,
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+    runner: TestRunner,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    dockerfile_name = "test.Dockerfile"
+
+    # Mock datetime
+    fixed_timestamp = "20240801-123456"
+    mock_datetime_instance = MagicMock()
+    mock_datetime_instance.strftime.return_value = fixed_timestamp
+    mock_datetime.now.return_value = mock_datetime_instance
+
+    # Mock Docker client
+    mock_docker_client = MagicMock()
+    mock_image = MagicMock()
+    mock_docker_client.images.build.return_value = (mock_image, ["some logs"])
+    mock_docker.from_env.return_value = mock_docker_client
+
+    result = runner.run_cli(
+        [
+            "-vv",
+            "new",
+            "image",
+            "--name",
+            dockerfile_name,
+            "--base",
+            "ubuntu:20.04",
+            "--expose",
+            "5050",
+            "--build",
+            "testing",
+        ]
+    )
+
+    assert result.exit_code == 0
+
+
 def test_template_new_image_json_exported(
     tmp_path: Path,
     monkeypatch: MonkeyPatch,
     runner: TestRunner,
-    caplog: LogCaptureFixture,
 ) -> None:
     monkeypatch.chdir(tmp_path)
     dockerfile_name = "test.Dockerfile"

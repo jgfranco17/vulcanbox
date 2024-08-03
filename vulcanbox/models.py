@@ -38,9 +38,10 @@ class DockerImage(BaseTemplatedFile):
 
     @staticmethod
     def __get_image_name(base_name: str) -> str:
-        now = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-        sanitized_name = base_name.replace(" ", "-").replace("/", "-")
-        return f"vulcanbox-{sanitized_name}-{now}"
+        now = dt.datetime.now()
+        formatted_time = now.strftime("%Y%m%d-%H%M%S")
+        sanitized_name = base_name.replace(" ", "-").replace(":", "-").replace("/", "-")
+        return f"vulcanbox-{sanitized_name}-{formatted_time}"
 
     def build(self, name: Optional[str] = ""):
         """Build the Docker image."""

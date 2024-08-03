@@ -38,7 +38,6 @@ def new_group() -> None:
 @click.option(
     "--build",
     type=str,
-    required=True,
     help="Build the image after templating",
     default="",
 )
@@ -69,7 +68,7 @@ def new_image(name: str, base: str, expose: List[int], build: str, export_config
         if image.is_built():
             raise VulcanBoxInputError(f"Image already built: {image.image_tag}")
         built_image = image.build(build)
-        click.echo(f"Finished building image: {built_image.id}")
+        logger.info(f"Finished building image: {built_image.id}")
 
     if export_config:
         base_image_used = base.replace(":", "-")

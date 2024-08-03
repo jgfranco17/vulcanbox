@@ -27,4 +27,4 @@ pytest *ARGS:
 # Run test coverage
 coverage:
     poetry run coverage run --source=vulcanbox --omit="*/__*.py,*/test_*.py" -m pytest
-    poetry run coverage report -m >coverage.txt
+    poetry run coverage report -m
