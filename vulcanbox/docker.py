@@ -7,15 +7,15 @@ import click
 import docker
 
 from .errors import VulcanBoxInputError
-from .models import DockerImage
-from .output import print_success
+from .models import DockerCompose, DockerImage
+from .output import print_success, print_warning
 
 logger = logging.getLogger(__name__)
 
 
-@click.group("docker")
-def docker_group() -> None:
-    """Interact with Docker images and containers."""
+@click.group("new")
+def new_group() -> None:
+    """Create new images and configurations."""
     pass
 
 
@@ -45,7 +45,7 @@ def __build_docker_image(dockerfile_path: str, image_name: str) -> None:
         logger.error(f"Unexpected error: {e}")
 
 
-@click.command("new")
+@click.command("image")
 @click.option(
     "--name",
     type=str,
@@ -77,7 +77,7 @@ def __build_docker_image(dockerfile_path: str, image_name: str) -> None:
     is_flag=True,
     help="Export the current configurations of the templated Dockerfile",
 )
-def new(name: str, base: str, expose: List[int], build: str, export_config: bool):
+def new_image(name: str, base: str, expose: List[int], build: str, export_config: bool):
     """Initialize a template Dockerfile."""
     # Create project directory if it doesn't exist
     new_file = os.path.join(os.getcwd(), name)
@@ -110,17 +110,61 @@ def new(name: str, base: str, expose: List[int], build: str, export_config: bool
             click.echo(f"Config JSON exported: {exported_config_file}")
 
 
-@click.command("list")
-def list_images():
-    """Get a list of images."""
-    client = docker.from_env()
-    images = client.images.list()
-    logger.info(f"Found {len(images)} images")
-    for idx, image in enumerate(images, start=1):
-        tags = ", ".join(image.tags)
-        name = tags or "none"
-        click.echo(f"[{idx}] {name} ({image.id})")
+@click.command("compose")
+@click.option(
+    "--image",
+    type=str,
+    required=True,
+    help="Base Dockerfile to use as image.",
+    prompt="Choose a target Dockerfile",
+    default="Dockerfile",
+)
+@click.option(
+    "--expose",
+    type=int,
+    help="Port to expose.",
+    prompt="Port to expose (22 for SSH)",
+    default=22,
+)
+@click.option(
+    "--count",
+    type=int,
+    required=True,
+    help="Replica count.",
+    prompt="Set replica count",
+    default=1,
+)
+@click.option(
+    "--with-network",
+    is_flag=True,
+    help="Link service instances with private network",
+)
+def new_compose(image: str, expose: int, count: str, with_network: bool) -> None:
+    """Initialize a template Docker Compose suite."""
+    compose_file = os.path.join(os.getcwd(), "docker-compose.yml")
+    if os.path.exists(compose_file):
+        if not click.confirm(
+            f"Compose file already exists in current directory, overwrite?",
+            default=True,
+        ):
+            print_warning("[USER ABORTED] Compose generation cancelled.")
+            return
+
+    image_file = os.path.join(os.getcwd(), image)
+    if not os.path.exists(image_file):
+        raise VulcanBoxInputError(f"Specified Dockerfile does not exist: {image_file}")
+
+    context = {
+        "image": image,
+        "count": count,
+        "port": expose,
+        "with_network": with_network,
+    }
+    logger.debug(f"Creating new Compose file: using '{image}', {count} replicas")
+    compose = DockerCompose(context)
+    compose.write()
+    print_success(f"Created new Docker Compose suite: {compose_file}")
 
 
-docker_group.add_command(new)
-docker_group.add_command(list_images)
+new_group.add_command(new_image)
+new_group.add_command(new_compose)

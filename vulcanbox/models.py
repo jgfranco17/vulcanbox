@@ -18,7 +18,13 @@ class DockerImage(BaseTemplatedFile):
 
     def __init__(self, name: str, context: Dict[str, str]) -> None:
         self.client = docker.from_env()
-        super().__init__(name=name, src="docker", context=context)
+        super().__init__(
+            name=name,
+            src="docker",
+            file_type="Dockerfile",
+            context=context,
+            whitespace=False,
+        )
         self.image_tag = None
 
     def is_built(self) -> bool:
@@ -60,3 +66,16 @@ class DockerImage(BaseTemplatedFile):
         )
         print(container.logs().decode("utf-8"))
         return container
+
+
+class DockerCompose(BaseTemplatedFile):
+    """Template engine for Docker Compose YAML."""
+
+    def __init__(self, context: Dict[str, str]) -> None:
+        self.client = docker.from_env()
+        super().__init__(
+            name="docker-compose.yml",
+            src="compose",
+            file_type="docker-compose.yml",
+            context=context,
+        )

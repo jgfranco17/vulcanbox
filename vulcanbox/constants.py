@@ -1,5 +1,6 @@
 import logging
 import os
+from dataclasses import dataclass
 from typing import Any, Final
 
 from .errors import VulcanBoxInputError
@@ -38,6 +39,7 @@ class Variable:
         logger.info(f"Validated environment variable '{self.__name}'")
 
 
+@dataclass(frozen=True)
 class Environment:
     """Constants for environment variables."""
 
@@ -45,6 +47,7 @@ class Environment:
     GITHUB_API_TOKEN = Variable("GITHUB_API_TOKEN")
 
 
+@dataclass(frozen=True)
 class LoggerFormats:
     """Fromatting strings for datetime formats."""
 

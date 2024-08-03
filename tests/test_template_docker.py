@@ -30,7 +30,15 @@ def test_template_new_image_sane(
     expected_files = [dockerfile_name]
 
     result = runner.run_cli(
-        ["-vv", "docker", "new", "--name", dockerfile_name, "--base", "ubuntu:20.04"]
+        [
+            "-vv",
+            "new",
+            "image",
+            "--name",
+            dockerfile_name,
+            "--base",
+            "ubuntu:20.04",
+        ]
     )
 
     assert result.exit_code == 0
@@ -55,8 +63,8 @@ def test_template_new_image_with_exposed_ports(
     result = runner.run_cli(
         [
             "-vv",
-            "docker",
             "new",
+            "image",
             "--name",
             dockerfile_name,
             "--base",
@@ -88,8 +96,8 @@ def test_template_new_image_invalid_name(
     result = runner.run_cli(
         [
             "-vv",
-            "docker",
             "new",
+            "image",
             "--name",
             "not-valid.txt",
         ]
@@ -112,8 +120,8 @@ def test_template_new_image_file_already_exists(
     result = runner.run_cli(
         [
             "-vv",
-            "docker",
             "new",
+            "image",
             "--name",
             unoriginal_file_name,
         ]
@@ -137,8 +145,8 @@ def test_template_new_image_json_exported(
     result = runner.run_cli(
         [
             "-vv",
-            "docker",
             "new",
+            "image",
             "--name",
             dockerfile_name,
             "--base",

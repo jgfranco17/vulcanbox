@@ -5,7 +5,7 @@ import colorama
 
 from . import __version__
 from .constants import LoggerFormats
-from .docker import docker_group
+from .docker import new_group
 from .errors import ErrorHandler
 from .output import ColorHandler
 
@@ -24,7 +24,8 @@ def __set_logger(level: int):
     handler = ColorHandler()
     handler.setLevel(log_level)
     formatter = logging.Formatter(
-        LoggerFormats.MESSAGE_FORMAT, datefmt=LoggerFormats.DATE_FORMAT
+        fmt="[%(asctime)s][%(levelname)s] %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
     handler.setFormatter(formatter)
     if not logger.hasHandlers():
@@ -46,4 +47,4 @@ def cli(context: click.Context, verbose: int):
     context.ensure_object(dict)
 
 
-cli.add_command(docker_group)
+cli.add_command(new_group)

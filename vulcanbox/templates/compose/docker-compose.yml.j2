@@ -1,0 +1,18 @@
+version: "3"
+
+services:{% for i in range(count) %}
+  app-{{ i+1 }}:
+    build:
+      context: .
+      dockerfile: {{ image}}
+    ports:
+    - {{ 5050+i }}:{{ port }}
+{%- if with_network %}
+    networks:
+    - private-network
+{%- endif %}{% endfor %}
+{% if with_network %}
+networks:
+  private-network:
+    driver: bridge
+{%- endif %}
