@@ -80,3 +80,8 @@ class ErrorHandler(click.Group):
         except click.UsageError as err:
             err.show()
             sys.exit(ExitCode.RUNTIME_ERROR)
+
+    def format_help(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
+        """Customize help info."""
+        super().format_help(ctx, formatter)
+        formatter.write("\nAuthor: Chino Franco\nEmail: chino@example.com\n")
