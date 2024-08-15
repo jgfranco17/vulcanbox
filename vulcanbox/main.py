@@ -1,21 +1,14 @@
 import logging
-from typing import Any, Dict
 
 import click
 import colorama
 
 from . import __version__
 from .docker import new_group
-from .errors import ErrorHandler
+from .handler import VulcanBoxCliHandler
 from .output import ColorHandler
 
 colorama.init(autoreset=True)
-
-
-CONTEXT_SETTINGS = {
-    "help_option_names": ["-h", "--help"],
-    "obj": {"Author": "Chino Franco", "Github": "https://github.com/jgfranco17"},
-}
 
 
 def __get_log_level(verbosity: int) -> int:
@@ -38,7 +31,7 @@ def __set_logger(level: int):
         logger.addHandler(handler)
 
 
-@click.group(cls=ErrorHandler, context_settings=CONTEXT_SETTINGS)
+@click.group(cls=VulcanBoxCliHandler)
 @click.pass_context
 @click.version_option(version=__version__)
 @click.option(

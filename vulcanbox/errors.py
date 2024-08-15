@@ -1,14 +1,6 @@
 """VulcanBox exceptions."""
 
-import logging
-import sys
-from typing import Any, Final, Optional
-
-import click
-
-from .output import print_warning
-
-logger = logging.getLogger(__name__)
+from typing import Final, Optional
 
 
 class ExitCode:
@@ -61,27 +53,3 @@ class VulcanBoxInputError(VulcanBoxBaseError):
         """Init an VulcanBox Input Error."""
         self.message = message
         super().__init__(self.message, ExitCode.INPUT_ERROR, help_text)
-
-
-class ErrorHandler(click.Group):
-    """A wrapped around CLI invocation that handles related errors."""
-
-    def invoke(self, ctx: click.Context) -> Any:
-        """Invoke the CLI and catch, log and exit for any raised errors."""
-        try:
-            return super().invoke(ctx)
-
-        except VulcanBoxBaseError as err:
-            logger.exception(err)
-            logger.error(f"{err.message}\n")
-            print_warning(f"{err.help_text}")
-            sys.exit(err.exit_code)
-
-        except click.UsageError as err:
-            err.show()
-            sys.exit(ExitCode.RUNTIME_ERROR)
-
-    def format_help(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
-        """Customize help info."""
-        super().format_help(ctx, formatter)
-        formatter.write("\nAuthor: Chino Franco\nEmail: chino@example.com\n")
