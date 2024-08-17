@@ -1,0 +1,31 @@
+name: Production Release
+
+on:
+  push:
+    paths:
+      - "vulcanbox/__init__.py"
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract version from __init__.py
+        id: extract_version
+        run: |
+          # Extract the version from __init__.py
+          VERSION=$(grep -oP '__version__ = "\K[^"]+' vulcanbox/__init__.py)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Install Github CLI
+        run: sudo apt-get install gh
+
+      - name: Release v${{ env.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          gh release create "$VERSION" --title "Release $VERSION" --notes "Release v$VERSION"
