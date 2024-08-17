@@ -54,10 +54,10 @@ jobs:
       - name: Fetch release notes
         id: read-notes
         run: |
-          NOTES=$(cat release/${{ env.VERSION }}.md)
+          NOTES=$(cat .github/release/${{ env.VERSION }}.md)
           echo "NOTES=$NOTES" >> $GITHUB_ENV
 
-      - name: Release v${{ env.VERSION }}
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
