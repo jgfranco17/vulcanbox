@@ -23,7 +23,7 @@ jobs:
 
       - name: Release v${{ env.VERSION }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
         run: |
           gh release create "$VERSION" --title "Release Vulcanbox $VERSION" --notes "Release v$VERSION"
