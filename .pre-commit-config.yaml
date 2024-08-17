@@ -61,7 +61,14 @@ repos:
     hooks:
       - id: detect-secrets
 
+  # Ensure version sync
   - repo: https://github.com/zricethezav/gitleaks
     rev: v8.5.3
     hooks:
       - id: gitleaks
+  - repo: local
+    hooks:
+      - id: compare-versions
+        name: Compare versions
+        entry: ./compare_versions.sh
+        language: script

@@ -13,9 +13,15 @@
 - _Type your changes here_
 - _Type your changes here_
 
+## PR Checks
+
+<!-- All points must be addressed before merge -->
+
+[ ] Release notes have been added
+[ ] New code is covered by unit tests
+
 ## Testing
 
-<!-- Optional -->
 <!-- This section explains to users how to test the changes on their local machine -->
 
 ## Future Work

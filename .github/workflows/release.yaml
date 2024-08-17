@@ -2,28 +2,64 @@ name: Production Release
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "pyproject.toml"
 
 jobs:
-  create_release:
+  publish-release:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Extract version from __init__.py
-        id: extract_version
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10.4"
+
+      - name: Install poetry
+        shell: bash
         run: |
-          # Extract the version from __init__.py
-          VERSION=$(grep -oP '__version__ = "\K[^"]+' vulcanbox/__init__.py)
+          pip install --upgrade pip
+          pip install poetry==1.8.3
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Install Just
+        uses: extractions/setup-just@v2
+
+      - name: Run tests
+        run: |
+          just pytest -vv
+
+      - name: Build Python package
+        run: |
+          poetry build
+
+      - name: Extract version from TOML
+        id: extract-version
+        run: |
+          ./compare_versions.sh
+          VERSION=$(grep -oP '^version = "\K[^"]+' pyproject.toml)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Install Github CLI
-        run: sudo apt-get install gh
+        run: |
+          sudo apt-get install gh
+
+      - name: Fetch release notes
+        id: read-notes
+        run: |
+          NOTES=$(cat release/${{ env.VERSION }}.md)
+          echo "NOTES=$NOTES" >> $GITHUB_ENV
 
       - name: Release v${{ env.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.USER_GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
         run: |
-          gh release create "$VERSION" --title "Release Vulcanbox $VERSION" --notes "Release v$VERSION"
+          gh release create "${{ env.VERSION }}" --title "${{ env.VERSION }}" --notes "${{ env.NOTES }}" dist/*
