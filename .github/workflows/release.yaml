@@ -1,9 +1,7 @@
 name: Production Release
 
 on:
-  push:
-    paths:
-      - "vulcanbox/__init__.py"
+  workflow_dispatch:
 
 jobs:
   create_release:
@@ -28,4 +26,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
         run: |
-          gh release create "$VERSION" --title "Release $VERSION" --notes "Release v$VERSION"
+          gh release create "$VERSION" --title "Release Vulcanbox $VERSION" --notes "Release v$VERSION"
