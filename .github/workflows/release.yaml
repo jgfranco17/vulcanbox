@@ -68,6 +68,6 @@ jobs:
       - name: Post release notes to summary
         if: success()
         run: |
-          echo '```shell' >> $GITHUB_STEP_SUMMARY
+          echo '```markdown' >> $GITHUB_STEP_SUMMARY
           cat .github/release/${{ env.VERSION }}.md >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
