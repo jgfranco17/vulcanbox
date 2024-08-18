@@ -23,7 +23,7 @@ if [ "$init_version" == "${toml_version}" ]; then
     echo "Versions match: ${toml_version}"
 else
     echo "Version mismatch:"
-    echo "${INIT_FILE}: ${init_version}"
-    echo "${TOML_FILE}: ${toml_version}"
+    echo "${INIT_FILE}=${init_version}"
+    echo "${TOML_FILE}=${toml_version}"
     exit 1
 fi
