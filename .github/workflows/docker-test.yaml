@@ -24,18 +24,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t vulcanbox-cli .
+          docker build -t vulcanbox .
+          sleep 3
+          docker image ls
 
-      - name: Run Docker container
+      - name: Run CLI Docker image
         run: |
-          docker run --name vulcanbox-container -d vulcanbox-cli
-          sleep 5
-
-      - name: Test Docker CLI
-        run: |
-          docker exec vulcanbox-container vulcanbox --help
+          docker run --rm vulcanbox --version
 
       - name: Clean up
         run: |
-          docker stop vulcanbox-container
-          docker rm vulcanbox-container
+          TARGET=$(docker images | grep "vulcanbox" | awk "{print \$3}")
+          docker rmi "${TARGET}"
