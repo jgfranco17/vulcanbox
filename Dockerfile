@@ -16,4 +16,4 @@ COPY . /app
 ENTRYPOINT ["poetry", "run", "vulcanbox"]
 
 # Override the entrypoint to start a shell if no command is provided
-CMD ["/bin/bash"]
+CMD ["--help"]
