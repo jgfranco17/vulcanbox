@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "pyproject.toml"
+      - "vulcanbox/__init__.py"
 
 jobs:
   verify:
@@ -81,9 +82,7 @@ jobs:
       - name: Post release notes to summary
         if: success()
         run: |
-          echo '```markdown' >> $GITHUB_STEP_SUMMARY
           cat .github/release/${{ env.VERSION }}.md >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Create release
         env:
