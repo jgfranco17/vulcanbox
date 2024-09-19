@@ -5,6 +5,7 @@ import colorama
 
 from . import __version__
 from .docker import new_group
+from .doctor import doctor
 from .handler import VulcanBoxCliHandler
 from .output import ColorHandler
 
@@ -47,3 +48,4 @@ def cli(context: click.Context, verbose: int):
 
 
 cli.add_command(new_group)
+cli.add_command(doctor)

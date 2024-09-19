@@ -11,3 +11,11 @@ class VulcanBoxFileType:
 
     DOCKERFILE: Final[str] = "Dockerfile"
     DOCKER_COMPOSE: Final[str] = "docker-compose.yml"
+
+
+@dataclass(frozen=True)
+class ConsoleIcons:
+    """Icons for the shell prints."""
+
+    CHECK: Final[str] = "\u2713"
+    CROSS: Final[str] = "\u2715"
