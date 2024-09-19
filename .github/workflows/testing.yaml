@@ -69,15 +69,32 @@ jobs:
           poetry run coverage run --source=vulcanbox --omit="*/__*.py,*/test_*.py" -m pytest
 
       - name: Generate report
+        shell: bash
         run: |
-          poetry run coverage report -m > coverage.txt
+          COVERAGE_FILE="coverage_report.txt"
+          echo "COVERAGE_FILE=$COVERAGE_FILE" >> $GITHUB_ENV
+          poetry run coverage report -m > "$COVERAGE_FILE"
+
+          # Check if the file exists
+          if [[ ! -f "$COVERAGE_FILE" ]]; then
+              echo "Coverage report file not found!"
+              exit 1
+          fi
+
+          TOTAL_COVERAGE=$(grep "^TOTAL" "$COVERAGE_FILE" | awk '{print $NF}')
+
+          if [[ -z "$TOTAL_COVERAGE" ]]; then
+              echo "Could not parse total coverage!"
+              exit 1
+          fi
+          echo "TOTAL_COVERAGE=$TOTAL_COVERAGE" >> $GITHUB_ENV
 
       - name: Create GHA job summary
         if: always()
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
-          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Coverage Report [${{ env.TOTAL_COVERAGE }}]" >> $GITHUB_STEP_SUMMARY
           echo "**${TIMESTAMP}**" >> $GITHUB_STEP_SUMMARY
           echo '```shell' >> $GITHUB_STEP_SUMMARY
-          cat coverage.txt >> $GITHUB_STEP_SUMMARY
+          cat ${{ env.COVERAGE_FILE }} >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
