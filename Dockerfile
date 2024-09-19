@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Minimal copy to leverage Docker cache
 COPY pyproject.toml poetry.lock* /app/
-RUN poetry install --no-dev --no-interaction --no-ansi
+RUN poetry -v install --no-dev --no-interaction --no-ansi --no-cache
 
 COPY . /app
 ENTRYPOINT ["poetry", "run", "vulcanbox"]
