@@ -1,4 +1,4 @@
-from vulcanbox.errors import (
+from vulcanbox.core.errors import (
     ExitCode,
     VulcanBoxBaseError,
     VulcanBoxInputError,

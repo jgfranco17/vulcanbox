@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from click.testing import CliRunner, Result
 
+from vulcanbox.core.output import ColorHandler
 from vulcanbox.main import cli
-from vulcanbox.output import ColorHandler
 
 
 class TestRunner:
@@ -51,11 +51,11 @@ def logger() -> MockLogger:
 
 @pytest.fixture
 def mock_datetime() -> Generator[MagicMock, None, None]:
-    with patch("vulcanbox.models.dt.datetime") as mock_datetime:
+    with patch("vulcanbox.core.models.dt.datetime") as mock_datetime:
         yield mock_datetime
 
 
 @pytest.fixture
 def mock_docker() -> Generator[MagicMock, None, None]:
-    with patch("vulcanbox.models.docker") as mock_docker:
+    with patch("vulcanbox.core.models.docker") as mock_docker:
         yield mock_docker

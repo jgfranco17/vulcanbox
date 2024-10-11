@@ -5,8 +5,8 @@ from typing import List, Tuple
 
 import click
 
-from .constants import ConsoleIcons
-from .errors import VulcanBoxRuntimeError
+from vulcanbox.core.constants import ConsoleIcons
+from vulcanbox.core.errors import VulcanBoxRuntimeError
 
 logger = logging.getLogger(__name__)
 

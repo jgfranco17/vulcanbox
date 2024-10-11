@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
-from .errors import VulcanBoxInputError
+from vulcanbox.core.errors import VulcanBoxInputError
 
 logger = logging.getLogger(__name__)
 

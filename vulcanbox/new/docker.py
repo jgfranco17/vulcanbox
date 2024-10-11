@@ -5,17 +5,11 @@ from typing import List
 
 import click
 
-from .errors import VulcanBoxInputError
-from .models import DockerCompose, DockerImage
-from .output import print_success, print_warning
+from vulcanbox.core.errors import VulcanBoxInputError
+from vulcanbox.core.models import DockerCompose, DockerImage
+from vulcanbox.core.output import print_success, print_warning
 
 logger = logging.getLogger(__name__)
-
-
-@click.group("new")
-def new_group() -> None:
-    """Create new images and configurations."""
-    pass
 
 
 @click.command("image")
@@ -142,7 +136,3 @@ def new_compose(image: str, expose: int, count: str, with_network: bool) -> None
     compose = DockerCompose(context)
     compose.write()
     print_success(f"Created new Docker Compose suite: {compose_file}")
-
-
-new_group.add_command(new_image)
-new_group.add_command(new_compose)

@@ -1,7 +1,7 @@
 import datetime as dt
 from unittest.mock import MagicMock, patch
 
-from vulcanbox.models import DockerImage
+from vulcanbox.core.models import DockerImage
 
 
 def test_docker_object_properties():
@@ -21,7 +21,7 @@ def test_docker_object_json() -> None:
     assert test_image.json() == expected_json
 
 
-@patch("vulcanbox.models.dt.datetime")
+@patch("vulcanbox.core.models.dt.datetime")
 def test_docker_object_container_naming(mock_datetime: MagicMock):
     # Mock datetime for control
     fixed_timestamp = "20240801-123456"

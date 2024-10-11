@@ -4,8 +4,8 @@ from typing import Any, Dict
 
 import click
 
-from .errors import ExitCode, VulcanBoxBaseError
-from .output import print_warning
+from vulcanbox.core.errors import ExitCode, VulcanBoxBaseError
+from vulcanbox.core.output import print_warning
 
 logger = logging.getLogger(__name__)
 

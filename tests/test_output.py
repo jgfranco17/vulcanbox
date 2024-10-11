@@ -1,5 +1,4 @@
 from io import StringIO
-from unittest.mock import patch
 
 from colorama import Fore, Style
 

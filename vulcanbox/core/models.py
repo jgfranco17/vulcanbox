@@ -6,8 +6,8 @@ import click
 import docker
 from tqdm import tqdm
 
-from .constants import VulcanBoxFileType
-from .templating import BaseTemplatedFile
+from vulcanbox.core.constants import VulcanBoxFileType
+from vulcanbox.core.templating import BaseTemplatedFile
 
 logger = logging.getLogger(__name__)
 

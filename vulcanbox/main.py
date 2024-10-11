@@ -3,11 +3,11 @@ import logging
 import click
 import colorama
 
-from . import __version__
-from .docker import new_group
-from .doctor import doctor
-from .handler import VulcanBoxCliHandler
-from .output import ColorHandler
+from vulcanbox import __version__
+from vulcanbox.core.handler import VulcanBoxCliHandler
+from vulcanbox.core.output import ColorHandler
+from vulcanbox.doctor import doctor
+from vulcanbox.new import new_group
 
 colorama.init(autoreset=True)
 
